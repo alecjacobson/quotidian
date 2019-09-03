@@ -28,8 +28,8 @@
 <style>
 :root {
   --dayw: 10px;
-  --toph: 200px;
-  --topb: 10px;
+  --bottomh: 200px;
+  --bottomb: 10px;
   --todayb: #434;
   --bgcolor: #656;
 }
@@ -55,22 +55,22 @@ div
   padding: 0;
   margin: 0;
 }
-div#bottom
+div#top
 {
   background-color: var(--bgcolor);
   font-size: 1em;
-  /*height: calc(100% - var(--toph) - 2*var(--topb));*/
+  /*height: calc(100% - var(--bottomh) - 2*var(--bottomb));*/
 }
-.topitem
+.bottomitem
 {
-  height: var(--toph);
-  line-height: var(--toph);
+  height: var(--bottomh);
+  line-height: var(--bottomh);
   border: 5px solid var(--todayb);
   background-color: var(--bgcolor);
   border-color: var(--bgcolor);
   margin: 0;
   padding: 0;
-  margin-bottom: 5px;
+  margin-top: 5px;
   overflow: hidden;
    -webkit-touch-callout: none; /* iOS Safari */
     -webkit-user-select: none; /* Safari */
@@ -80,7 +80,7 @@ div#bottom
             user-select: none; /* Non-prefixed version, currently
                                   supported by Chrome and Opera */
 }
-#topright
+#bottomright
 {
   margin-right: auto;
   border-left: 0;
@@ -88,7 +88,7 @@ div#bottom
   color: #605060;
   text-align: left;
 }
-#topleft
+#bottomleft
 {
   margin-left: auto;
   border-left: 0;
@@ -96,7 +96,7 @@ div#bottom
   color: #605060;
   text-align: right;
 }
-#top
+#bottom
 {  
   margin: 0;
   padding: 0;
@@ -105,12 +105,12 @@ div#bottom
   margin-right: auto;
   text-align: center;
 }
-#topcenter
+#bottomcenter
 {
   background-color: none;
   font-size: 1em;
-  width: var(--toph);
-  height: var(--toph);
+  width: var(--bottomh);
+  height: var(--bottomh);
   overflow: hidden;
   border-color: var(--todayb);
   /* awkward to have thick border*/
@@ -185,7 +185,7 @@ var sel = 0;
         month.append(day);
         d++;
       }
-      $('#bottom').append(month);
+      $('#top').append(month);
     }
   }
 
@@ -201,12 +201,12 @@ var sel = 0;
 
     var count = counts[sel];
     var eff_count = (count>=cmap.length?cmap.length-1:count);
-    $('#topcenter').css("background-color",rgb2string(
+    $('#bottomcenter').css("background-color",rgb2string(
       cmap[eff_count]));
-    $('#topcenter').css("color",rgb2string(
+    $('#bottomcenter').css("color",rgb2string(
       cmap[eff_count].map(x => x * 0.8)
     ));
-    $('#topcenter').text(count);
+    $('#bottomcenter').text(count);
     $('#d'+sel).css("background-color",rgb2string(
       cmap[eff_count]));
   };
@@ -228,20 +228,20 @@ var sel = 0;
         });
   };
   update_sel(sel);
-  $('#topcenter').click(
+  $('#bottomcenter').click(
     function()
     {
       update_sel_count( (counts[sel]+1)% 11 );
       update_sel(sel);
     }
   );
-  $('#topright').click(
+  $('#bottomright').click(
     function()
     {
       update_sel((sel+1)%365);
     }
   );
-  $('#topleft').click(
+  $('#bottomleft').click(
     function()
     {
       update_sel((sel-1)%365);
@@ -254,20 +254,19 @@ var sel = 0;
   </script>
 </head>
 <body>
-  <table id=top>
+  <table id=bottom>
+  <div id=top>
+  </div>
     <tr>
-    <td   class=topitem id=topleft>
+    <td   class=bottomitem id=bottomleft>
       &lt;
     </td>
-    <td   class=topitem id=topcenter>
+    <td   class=bottomitem id=bottomcenter>
     </td>
-    <td   class=topitem id=topright>
+    <td   class=bottomitem id=bottomright>
       &gt;
     </td>
   </tr>
   </table>
-
-  <div id=bottom>
-  </div>
 </body>
 </html>
