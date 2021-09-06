@@ -28,248 +28,25 @@
 <meta name="msapplication-TileImage" content="favicon/ms-icon-144x144.png">
 <meta name="theme-color" content="#ffffff">
 
-<style>
-:root {
-  --dayw: 10px;
-  --bottomh: 200px;
-  --bottomb: 10px;
-  --todayb: #434;
-  --bgcolor: #656;
-}
-html
-{
-  padding: 0;
-  margin: 0;
-  height: 100%;
-}
-body
-{
-  background-color: var(--bgcolor);
-  padding: 0;
-  margin: 0;
-  height: 100%;
-  text-align: center;
-  font-size: 10em;
-  font-family: 'Optima';
-  font-weight: bold;
-}
-div
-{
-  padding: 0;
-  margin: 0;
-}
-div#top
-{
-  background-color: var(--bgcolor);
-  font-size: 1em;
-  /*height: calc(100% - var(--bottomh) - 2*var(--bottomb));*/
-}
-.bottomitem
-{
-  height: var(--bottomh);
-  line-height: var(--bottomh);
-  border: 5px solid var(--todayb);
-  background-color: var(--bgcolor);
-  border-color: var(--bgcolor);
-  margin: 0;
-  padding: 0;
-  margin-top: 5px;
-  overflow: hidden;
-   -webkit-touch-callout: none; /* iOS Safari */
-    -webkit-user-select: none; /* Safari */
-     -khtml-user-select: none; /* Konqueror HTML */
-       -moz-user-select: none; /* Firefox */
-        -ms-user-select: none; /* Internet Explorer/Edge */
-            user-select: none; /* Non-prefixed version, currently
-                                  supported by Chrome and Opera */
-}
-#bottomright
-{
-  margin-right: auto;
-  border-left: 0;
-  border-right: 0;
-  color: #605060;
-  text-align: left;
-}
-#bottomleft
-{
-  margin-left: auto;
-  border-left: 0;
-  border-right: 0;
-  color: #605060;
-  text-align: right;
-}
-#bottom
-{  
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  margin-left: auto;
-  margin-right: auto;
-  text-align: center;
-}
-#bottomcenter
-{
-  background-color: none;
-  font-size: 1em;
-  width: var(--bottomh);
-  height: var(--bottomh);
-  overflow: hidden;
-  border-color: var(--todayb);
-  /* awkward to have thick border*/
-}
-div.month
-{
-  background-color: none;
-  display: inline-block;
-  vertical-align: top;
-}
-div.day
-{
-  background-color: #0ff;
-  width: var(--dayw);
-  height: var(--dayw);
-  border: 1px solid #555;
-  padding: 1px;
-  margin: 1px;
-}
-</style>
+  <link rel="stylesheet" href=style.css />
   <script src = "https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-  <script>
-    var cmap = [
-    [143,128,143],
-    [255,255,178],
-    [254,217,118],
-    [254,178,76],
-    [253,141,60],
-    [240,59,32],
-    [189,0,38]];
-var counts = new Array(366).fill(0);
-function rgb2string(rgb)
-{
-  return 'rgb('+rgb[0]+','+rgb[1]+','+rgb[2]+')';
-};
-var sel = 0;
-    $( document ).ready(function()
-{
-  $.getJSON('counts.json', function(jd) {
-    counts = jd.counts;
-
-  /* get today */
-  var now = new Date();
-  var start = new Date(now.getFullYear(), 0, 0);
-  var diff = now - start;
-  var oneDay = 1000 * 60 * 60 * 24;
-  var day_of_the_year = Math.floor(diff / oneDay)-1;
-  sel = day_of_the_year;
-
-
-  //for(var i = 0;i< day_of_the_year;i++)
-  //{
-  //  counts[i] = Math.floor(Math.random() * (6 - 0) + 0);
-  //}
-  //for(var i = day_of_the_year+1;i<counts.length;i++)
-  //{
-  //  counts[i] = 0;
-  //}
-
-  var days_in_each_month = [ 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-  {
-    var d = 0;
-    for(var i = 0;i<12;i++)
-    {
-      var month = $('<div class=month id=m'+i+' >');
-      for(var j = 0;j < days_in_each_month[i]; j++)
-      {
-        var day = $('<div class=day id=d'+d+' >');
-        var count = counts[d];
-        var eff_count = (count>=cmap.length?cmap.length-1:count);
-        day.css("background-color",rgb2string(cmap[ eff_count ]));
-        month.append(day);
-        d++;
-      }
-      $('#top').append(month);
-    }
-  }
-
-  function update_sel(sel_in)
-  {
-    $('#d'+sel).css('padding','1px');
-    $('#d'+sel).css('border','1px solid #555');
-    sel = sel_in;
-
-    $('#d'+sel).addClass('today');
-    $('#d'+sel).css('padding','0px');
-    $('#d'+sel).css('border','2px solid var(--todayb)');
-
-    var count = counts[sel];
-    var eff_count = (count>=cmap.length?cmap.length-1:count);
-    $('#bottomcenter').css("background-color",rgb2string(
-      cmap[eff_count]));
-    $('#bottomcenter').css("color",rgb2string(
-      cmap[eff_count].map(x => x * 0.8)
-    ));
-    $('#bottomcenter').text(count);
-    $('#d'+sel).css("background-color",rgb2string(
-      cmap[eff_count]));
-  };
-  function update_sel_count(count_in)
-  {
-    counts[sel] = count_in;
-    $.ajax({
-            url: "save.php",
-            type: "POST",
-      data: { 'data': JSON.stringify({'counts': counts})},
-            //dataType: "JSON",
-            success: function (response) {
-              // response from php
-              console.log("response: "+response);
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                console.log(textStatus, errorThrown);
-            }
-        });
-  };
-  update_sel(sel);
-  $('#bottomcenter').click(
-    function()
-    {
-      update_sel_count( (counts[sel]+1)% 11 );
-      update_sel(sel);
-    }
-  );
-  $('#bottomright').click(
-    function()
-    {
-      update_sel((sel+1)%365);
-    }
-  );
-  $('#bottomleft').click(
-    function()
-    {
-      update_sel((sel-1)%365);
-    }
-  );
-
-  });
-  
-});
-  </script>
 </head>
 <body>
-  <table id=bottom>
   <div id=top>
   </div>
+  <table id=bottom>
     <tr>
     <td   class=bottomitem id=bottomleft>
       &lt;
     </td>
-    <td   class=bottomitem id=bottomcenter>
+    <td   class="bottomitem" id=bottomcenter>
     </td>
     <td   class=bottomitem id=bottomright>
       &gt;
     </td>
   </tr>
   </table>
+  <script src=quotidian.js>
+  </script>
 </body>
 </html>
