@@ -4,7 +4,17 @@
   --bottomb: 10px;
   --todayb: #434;
   --bgcolor: #656;
+  --faint: #605060;
+  --click:       rgb(128,160,128);
+  --countable-6: rgb(189,0,38)   ;
+  --countable-5: rgb(240,59,32)  ;
+  --countable-4: rgb(253,141,60) ;
+  --countable-3: rgb(254,178,76) ;
+  --countable-2: rgb(254,217,118);
+  --countable-1: rgb(255,255,178);
+  --countable-0: rgb(143,128,143);
 }
+
 html
 {
   padding: 0;
@@ -57,7 +67,7 @@ div#top
   margin-right: auto;
   border-left: 0;
   border-right: 0;
-  color: #605060;
+  color: var(--faint);
   text-align: left;
 }
 #bottomleft
@@ -65,7 +75,7 @@ div#top
   margin-left: auto;
   border-left: 0;
   border-right: 0;
-  color: #605060;
+  color: var(--faint);
   text-align: right;
 }
 #bottom
@@ -110,12 +120,13 @@ div#top
 }
 
 /* overflow */
-.day                   { background-color: rgb(143,128,143); }
-[class*=" countable-"] { background-color: rgb(189,0,38)   ; }
-.countable-6           { background-color: rgb(189,0,38)   ; }
-.countable-5           { background-color: rgb(240,59,32)  ; }
-.countable-4           { background-color: rgb(253,141,60) ; }
-.countable-3           { background-color: rgb(254,178,76) ; }
-.countable-2           { background-color: rgb(254,217,118); }
-.countable-1           { background-color: rgb(255,255,178); }
-.countable-0           { background-color: rgb(143,128,143); }
+.day                   { background-color: var(--countable-0) }
+[class*=" countable-"] { background-color: var(--countable-6) }
+.countable-6           { background-color: var(--countable-6) }
+.countable-5           { background-color: var(--countable-5) }
+.countable-4           { background-color: var(--countable-4) }
+.countable-3           { background-color: var(--countable-3) }
+.countable-2           { background-color: var(--countable-2) }
+.countable-1           { background-color: var(--countable-1) }
+.countable-0           { background-color: var(--countable-0) }
+#bottomcenter.waiting  { background-color: var(--click) }
